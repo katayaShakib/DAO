@@ -166,6 +166,22 @@ export default function Home() {
     setLoading(false);
   }
 
+  async function withdrawDAOEther() {
+    setLoading(true);
+    try {
+      const tx = await writeContract({
+        address: CryptoDevsDAOAddress,
+        abi: CryptoDevsDAOABI,
+        functionName: "withdrawEther",
+        //args: [proposalId],
+      });
+    } catch (error) {
+      console.error(error);
+      window.alert(error);
+    }
+    setLoading(false);
+  }
+
   // Render the contents of the appropriate tab based on `selectedTab`
   function renderTabs() {
     if (selectedTab === "Create Proposal") {
@@ -184,23 +200,25 @@ export default function Home() {
           Loading... Waiting for transaction...
         </div>
       );
-    } else if (nftBalanceOfUser.data === 0) {
+    } else if (nftBalanceOfUser.data === 0n) {
       return (
         <div className={styles.description}>
-          You do not own any CryptoDevs NFTs. <br />
-          <b>You cannot create or vote on proposals</b>
+          <p>
+            You do not own any CryptoDevs NFTs.
+            <strong> You cannot create or vote on proposals</strong>
+          </p>
         </div>
       );
     } else {
       return (
-        <div className={styles.container}>
+        <div className={styles.flex}>
           <label>Fake NFT Token ID to Purchase: </label>
           <input
             placeholder="0"
             type="number"
             onChange={(e) => setFakeNftTokenId(e.target.value)}
           />
-          <button className={styles.button2} onClick={createProposal}>
+          <button className={styles.button} onClick={createProposal}>
             Create
           </button>
         </div>
@@ -230,26 +248,26 @@ export default function Home() {
               <p>Deadline: {p.deadline.toLocaleString()}</p>
               <p>Yay Votes: {p.yayVotes}</p>
               <p>Nay Votes: {p.nayVotes}</p>
-              <p>Executed?: {p.executed.toString()}</p>
+              <p>Executed: {p.executed.toString()}</p>
               {p.deadline.getTime() > Date.now() && !p.executed ? (
-                <div className={styles.flex}>
+                <div className={styles.flex + " " + styles.padding1rem0}>
                   <button
-                    className={styles.button2}
+                    className={styles.button}
                     onClick={() => voteForProposal(p.proposalId, "YAY")}
                   >
                     Vote YAY
                   </button>
                   <button
-                    className={styles.button2}
+                    className={styles.button}
                     onClick={() => voteForProposal(p.proposalId, "NAY")}
                   >
                     Vote NAY
                   </button>
                 </div>
               ) : p.deadline.getTime() < Date.now() && !p.executed ? (
-                <div className={styles.flex}>
+                <div className={styles.flex + " " + styles.padding1rem0}>
                   <button
-                    className={styles.button2}
+                    className={styles.button}
                     onClick={() => executeProposal(p.proposalId)}
                   >
                     Execute Proposal{" "}
@@ -257,7 +275,7 @@ export default function Home() {
                   </button>
                 </div>
               ) : (
-                <div className={styles.description}>Proposal Executed</div>
+                <div className={styles.description + " " + styles.padding1rem0}>Proposal Executed</div>
               )}
             </div>
           ))}
@@ -298,19 +316,23 @@ export default function Home() {
 
       <div className={styles.main}>
         <div>
-          <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
-          <div className={styles.description}>Welcome to the DAO!</div>
+          <h1 className={styles.title}>Welcome to Crypto Devs DAO!</h1>
           <div className={styles.description}>
-            Your CryptoDevs NFT Balance: {nftBalanceOfUser.data.toString()}
+            Your CryptoDevs NFT Balance:{" "}
+            {nftBalanceOfUser && nftBalanceOfUser.data
+              ? nftBalanceOfUser.data.toString()
+              : "..."}
             <br />
-            {daoBalance.data && (
-              <>
-                Treasury Balance:{" "}
-                {formatEther(daoBalance.data.value).toString()} ETH
-              </>
-            )}
+            Treasury Balance:{" "}
+            {daoBalance && daoBalance.data
+              ? formatEther(daoBalance.data.value).toString()
+              : "..."}{" "}
+            ETH
             <br />
-            Total Number of Proposals: {numOfProposalsInDAO.data.toString()}
+            Total Number of Proposals:{" "}
+            {numOfProposalsInDAO && numOfProposalsInDAO.data
+              ? numOfProposalsInDAO.data.toString()
+              : "..."}
           </div>
           <div className={styles.flex}>
             <button
@@ -329,7 +351,7 @@ export default function Home() {
           {renderTabs()}
           {/* Display additional withdraw button if connected wallet is owner */}
           {address && address.toLowerCase() === daoOwner.data.toLowerCase() ? (
-            <div>
+            <div className={styles.flex}>
               {loading ? (
                 <button className={styles.button}>Loading...</button>
               ) : (
