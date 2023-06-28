@@ -1,15 +1,12 @@
 const hre = require("hardhat");
 
+const CryptoDevsNFTTarget = "0x96B091A0c0235846Daac59301bC16A6f7e43C9bf";
+
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function main() {
-  // Deploy the NFT Contract
-  const nftContract = await hre.ethers.deployContract("CryptoDevsNFT");
-  await nftContract.waitForDeployment();
-  console.log("CryptoDevsNFT deployed to:", nftContract.target);
-
   // Deploy the Fake Marketplace Contract
   const fakeNftMarketplaceContract = await hre.ethers.deployContract(
     "FakeNFTMarketplace"
@@ -23,19 +20,13 @@ async function main() {
   // Deploy the DAO Contract
   const daoContract = await hre.ethers.deployContract("CryptoDevsDAO", [
     fakeNftMarketplaceContract.target,
-    nftContract.target,
+    CryptoDevsNFTTarget,
   ]);
   await daoContract.waitForDeployment();
   console.log("CryptoDevsDAO deployed to:", daoContract.target);
 
   // Sleep for 30 seconds to let Etherscan catch up with the deployments
   await sleep(30 * 1000);
-
-  // Verify the NFT Contract
-  await hre.run("verify:verify", {
-    address: nftContract.target,
-    constructorArguments: [],
-  });
 
   // Verify the Fake Marketplace Contract
   await hre.run("verify:verify", {
@@ -48,7 +39,7 @@ async function main() {
     address: daoContract.target,
     constructorArguments: [
       fakeNftMarketplaceContract.target,
-      nftContract.target,
+      CryptoDevsNFTTarget,
     ],
   });
 }
