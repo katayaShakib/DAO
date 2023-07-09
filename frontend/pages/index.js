@@ -112,6 +112,7 @@ export default function Home() {
 
   // Function to fetch all proposals in the DAO
   async function fetchAllProposals() {
+    setLoading(true);
     try {
       const proposals = [];
 
@@ -121,6 +122,8 @@ export default function Home() {
       }
 
       setProposals(proposals);
+      setLoading(false);
+
       return proposals;
     } catch (error) {
       console.error(error);
@@ -196,7 +199,7 @@ export default function Home() {
   function renderCreateProposalTab() {
     if (loading) {
       return <div>Loading... Waiting for transaction...</div>;
-    } else if (nftBalanceOfUser.data === 0n) {
+    } else if (formatEther(nftBalanceOfUser.data) === "0") {
       return (
         <div>
           <p>
@@ -208,7 +211,7 @@ export default function Home() {
     } else {
       return (
         <div className={styles.flex}>
-          <label>Fake NFT Token ID to Purchase: </label>
+          <label>Enter Fake NFT Token ID to Purchase: </label>
           <input
             placeholder="0"
             type="number"
