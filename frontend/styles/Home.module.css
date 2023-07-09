@@ -1,43 +1,24 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-  min-height: 100vh;
-  background-color: rgb(18, 24, 42);
-  color: rgb(255, 255, 255);
-}
-
-.main > div {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: "Courier New", Courier, monospace;
+  padding: 6rem 2rem 2rem;
+  color: rgb(255, 255, 255);
   gap: 2rem;
 }
 
-.title {
+.main h1 {
   text-align: center;
 }
 
-.description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
-}
-
-.padding1rem0 {
-  padding: 1rem 0;
+.status {
+  line-height: 24px;
 }
 
 .card {
-  padding: 1rem 1.2rem;
+  padding: 1rem 2.5rem;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px solid rgba(var(--card-border-rgb), 0);
@@ -45,19 +26,9 @@
 }
 
 .card p {
-  margin: 0;
   opacity: 0.6;
   font-size: 0.9rem;
   line-height: 1.5;
-  max-width: 30ch;
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  .card:hover {
-    background: rgba(var(--card-rgb), 0.1);
-    border: 1px solid rgba(var(--card-border-rgb), 0.15);
-  }
 }
 
 .flex {
@@ -67,77 +38,80 @@
   gap: 1rem;
 }
 
-.flex > button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
+.tabBtn {
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 1);
   border: 1px solid rgba(var(--card-border-rgb), 0.15);
   transition: background 200ms, border 200ms;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
+  background: rgba(var(--card-rgb), 0.2);
+  color: #ffffff;
 }
 
-.flex > button:hover {
-  background: rgba(var(--card-rgb), 0.2);
+.tabBtnActive {
+  background: #ffffff;
+  color: rgb(18, 24, 42);
+  box-shadow: 0px 8px 15px rgba(255, 255, 255, 0.1);
+}
+
+.tabBtn:hover {
+  background: rgba(var(--card-rgb), 0.5);
   border: 1px solid rgba(var(--card-border-rgb), 0.25);
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  transition: background 200ms, border 200ms;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #12e89a;
+  color: #ffffff;
 }
 
 .flex > input {
   border-radius: 8px;
   padding: 6px;
+  width: 96px;
 }
 
-.card {
-  padding: 1rem 2.5rem;
+.connect {
+  font-family: "Courier New", Courier, monospace;
+  color: rgb(255, 255, 255);
+  padding: 1rem 2rem 2rem;
+  text-align: center;
 }
 
-.description {
-  font-size: 0.8rem;
+.connectBtn {
+  width: fit-content;
+  margin-inline-start: auto;
+  margin-block-end: 11rem;
 }
 
-.description p,
-.description div {
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
+.margin102rem {
+  margin: 1rem 0 2rem;
 }
 
-.description p {
-  align-items: center;
-  inset: 0 0 auto;
-  padding: 2rem 1rem 1.4rem;
-  border-radius: 0;
-  border: none;
-  border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.25);
-  background: linear-gradient(
-    to bottom,
-    rgba(var(--background-start-rgb), 1),
-    rgba(var(--callout-rgb), 0.5)
-  );
-  background-clip: padding-box;
-  backdrop-filter: blur(24px);
+/* Enable hover only on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .tabBtn:hover {
+    background: rgba(var(--card-rgb), 0.5);
+    border: 1px solid rgba(var(--card-border-rgb), 0.25);
+  }
+  .card:hover {
+    background: rgba(var(--card-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  }
+
+  .button:hover {
+    background: rgba(18, 232, 154, 0.5);
+    border: 1px solid rgba(var(--card-border-rgb), 0.25);
+  }
 }
 
-.description div {
-  align-items: flex-end;
-  pointer-events: none;
-  inset: auto 0 0;
-  padding: 2rem;
-  height: 200px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgb(var(--background-end-rgb)) 40%
-  );
-  z-index: 1;
-}
-
-.flex label {
-  font-size: 0.8rem;
+@media (max-width: 768px) {
 }

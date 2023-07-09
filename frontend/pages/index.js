@@ -195,14 +195,10 @@ export default function Home() {
   // Renders the 'Create Proposal' tab content
   function renderCreateProposalTab() {
     if (loading) {
-      return (
-        <div className={styles.description}>
-          Loading... Waiting for transaction...
-        </div>
-      );
+      return <div>Loading... Waiting for transaction...</div>;
     } else if (nftBalanceOfUser.data === 0n) {
       return (
-        <div className={styles.description}>
+        <div>
           <p>
             You do not own any CryptoDevs NFTs.
             <strong> You cannot create or vote on proposals</strong>
@@ -229,15 +225,9 @@ export default function Home() {
   // Renders the 'View Proposals' tab content
   function renderViewProposalsTab() {
     if (loading) {
-      return (
-        <div className={styles.description}>
-          Loading... Waiting for transaction...
-        </div>
-      );
+      return <div>Loading... Waiting for transaction...</div>;
     } else if (proposals.length === 0) {
-      return (
-        <div className={styles.description}>No proposals have been created</div>
-      );
+      return <div>No proposals have been created</div>;
     } else {
       return (
         <div>
@@ -248,9 +238,9 @@ export default function Home() {
               <p>Deadline: {p.deadline.toLocaleString()}</p>
               <p>Yay Votes: {p.yayVotes}</p>
               <p>Nay Votes: {p.nayVotes}</p>
-              <p>Executed: {p.executed.toString()}</p>
+              {!p.executed ? <p>Executed: {p.executed.toString()}</p> : ""}
               {p.deadline.getTime() > Date.now() && !p.executed ? (
-                <div className={styles.flex + " " + styles.padding1rem0}>
+                <div className={styles.flex}>
                   <button
                     className={styles.button}
                     onClick={() => voteForProposal(p.proposalId, "YAY")}
@@ -265,9 +255,9 @@ export default function Home() {
                   </button>
                 </div>
               ) : p.deadline.getTime() < Date.now() && !p.executed ? (
-                <div className={styles.flex + " " + styles.padding1rem0}>
+                <div className={styles.flex}>
                   <button
-                    className={styles.button}
+                    className={styles.button + " " + styles.margin102rem}
                     onClick={() => executeProposal(p.proposalId)}
                   >
                     Execute Proposal{" "}
@@ -275,7 +265,7 @@ export default function Home() {
                   </button>
                 </div>
               ) : (
-                <div className={styles.description + " " + styles.padding1rem0}>Proposal Executed</div>
+                <div className={styles.margin102rem}>Proposal Executed</div>
               )}
             </div>
           ))}
@@ -301,8 +291,18 @@ export default function Home() {
 
   if (!isConnected)
     return (
-      <div>
-        <ConnectButton />
+      <div className={inter.className}>
+        <Head>
+          <title>CryptoDevs DAO</title>
+          <meta name="description" content="CryptoDevs DAO" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={styles.connect}>
+          <div className={styles.connectBtn}>
+            <ConnectButton />
+          </div>
+          <h1>Welcome to Crypto Devs DAO!</h1>
+        </div>
       </div>
     );
 
@@ -315,55 +315,63 @@ export default function Home() {
       </Head>
 
       <div className={styles.main}>
-        <div>
-          <h1 className={styles.title}>Welcome to Crypto Devs DAO!</h1>
-          <div className={styles.description}>
-            Your CryptoDevs NFT Balance:{" "}
-            {nftBalanceOfUser && nftBalanceOfUser.data
-              ? nftBalanceOfUser.data.toString()
-              : "..."}
-            <br />
-            Treasury Balance:{" "}
-            {daoBalance && daoBalance.data
-              ? formatEther(daoBalance.data.value).toString()
-              : "..."}{" "}
-            ETH
-            <br />
-            Total Number of Proposals:{" "}
-            {numOfProposalsInDAO && numOfProposalsInDAO.data
-              ? numOfProposalsInDAO.data.toString()
-              : "..."}
-          </div>
-          <div className={styles.flex}>
-            <button
-              className={styles.button}
-              onClick={() => setSelectedTab("Create Proposal")}
-            >
-              Create Proposal
-            </button>
-            <button
-              className={styles.button}
-              onClick={() => setSelectedTab("View Proposals")}
-            >
-              View Proposals
-            </button>
-          </div>
-          {renderTabs()}
-          {/* Display additional withdraw button if connected wallet is owner */}
-          {address && address.toLowerCase() === daoOwner.data.toLowerCase() ? (
-            <div className={styles.flex}>
-              {loading ? (
-                <button className={styles.button}>Loading...</button>
-              ) : (
-                <button className={styles.button} onClick={withdrawDAOEther}>
-                  Withdraw DAO ETH
-                </button>
-              )}
-            </div>
-          ) : (
-            ""
-          )}
+        <h1>Welcome to Crypto Devs DAO!</h1>
+        <div className={styles.status}>
+          Your CryptoDevs NFT Balance:{" "}
+          {nftBalanceOfUser && nftBalanceOfUser.data
+            ? nftBalanceOfUser.data.toString()
+            : "..."}
+          <br />
+          Treasury Balance:{" "}
+          {daoBalance && daoBalance.data
+            ? formatEther(daoBalance.data.value).toString()
+            : "..."}{" "}
+          ETH
+          <br />
+          Total Number of Proposals:{" "}
+          {numOfProposalsInDAO && numOfProposalsInDAO.data
+            ? numOfProposalsInDAO.data.toString()
+            : "..."}
         </div>
+
+        {/* Display additional withdraw button if connected wallet is owner */}
+        {address && address.toLowerCase() === daoOwner.data.toLowerCase() ? (
+          <div className={styles.flex}>
+            {loading ? (
+              <button className={styles.button}>Loading...</button>
+            ) : (
+              <button className={styles.button} onClick={withdrawDAOEther}>
+                Withdraw DAO ETH
+              </button>
+            )}
+          </div>
+        ) : (
+          ""
+        )}
+
+        <div className={styles.flex}>
+          <button
+            className={
+              selectedTab === "Create Proposal"
+                ? styles.tabBtnActive + " " + styles.tabBtn
+                : styles.tabBtn
+            }
+            onClick={() => setSelectedTab("Create Proposal")}
+          >
+            Create Proposal
+          </button>
+          <button
+            className={
+              selectedTab === "View Proposals"
+                ? styles.tabBtnActive + " " + styles.tabBtn
+                : styles.tabBtn
+            }
+            onClick={() => setSelectedTab("View Proposals")}
+          >
+            View Proposals
+          </button>
+        </div>
+        {renderTabs()}
       </div>
     </div>
   );
