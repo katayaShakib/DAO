@@ -338,7 +338,7 @@ export default function Home() {
         </div>
 
         {/* Display additional withdraw button if connected wallet is owner */}
-        {address && address.toLowerCase() === daoOwner.data.toLowerCase() ? (
+        {address && daoOwner && address.toLowerCase() === daoOwner.data.toLowerCase() ? (
           <div className={styles.flex}>
             {loading ? (
               <button className={styles.button}>Loading...</button>
